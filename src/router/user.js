@@ -1,8 +1,8 @@
-import express from "express"
+import express from "express";
 import { Login, Singup } from "../controllers/user";
 
+const router = express.Router();
+router.post("/signup", Singup);
+router.post("/signin", Login);
 
-const Router = express.Router();
-Router.post("/singup",Singup)
-Router.post("/singin",Login)
-export default Router 
+export default router;

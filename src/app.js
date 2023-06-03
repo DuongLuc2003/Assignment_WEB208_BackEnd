@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import routerApp from "./router";
 import cors from 'cors'
+import Router from "./router/user";
 
 const app = express();
 
@@ -13,6 +14,7 @@ routerApp(app);
 app.get("/", (req, res) => {
     res.send("Hello word");
 });
+app.use("/api",Router)
 
 mongoose
     .connect("mongodb+srv://asm:%40123456@cluster0.3qrknkx.mongodb.net/banhang?retryWrites=true&w=majority", {

@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import { VitePluginNode } from "vite-plugin-node";
+import jsconfigPaths from "vite-jsconfig-paths";
 
 export default defineConfig({
     // ...vite configures
@@ -8,11 +9,11 @@ export default defineConfig({
         port: 8000,
     },
     plugins: [
+        jsconfigPaths(),
         ...VitePluginNode({
             adapter: "express",
 
             appPath: "src/app.js",
-            
 
             exportName: "viteNodeApp",
 

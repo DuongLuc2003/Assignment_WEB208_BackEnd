@@ -21,9 +21,9 @@ mongoose
     })
     .then((result) => {
         console.log("ConnectDb successfully!");
-        app.listen(8000, () => {
-            console.log("I am runing port 8000");
-        });
+        // app.listen(8000, () => {
+        //     console.log("I am runing port 8000");
+        // });
     });
 
 export const viteNodeApp = app;

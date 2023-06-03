@@ -1,14 +1,4 @@
-import Joi from "joi";
 import ProductModel from "~/models/product.model.js";
-
-const schema = Joi.object({
-    name: Joi.string().required(),
-    price: Joi.number().required(),
-    original_price: Joi.number().required(),
-    description: Joi.string().required(),
-    images: Joi.array().items({ base_url: Joi.string().required(), publicId: Joi.string() }),
-    categoryId: Joi.string().required(),
-});
 
 export const getAllProducts = async (req, res) => {
     try {
@@ -24,7 +14,7 @@ export const getAllProducts = async (req, res) => {
         const { docs, ...data } = await ProductModel.paginate({}, options);
         res.json({
             meassge: "Success",
-            products: docs,
+            data: docs,
             ...data,
         });
     } catch (error) {
@@ -46,7 +36,7 @@ export const getProductsByCategoryId = async (req, res) => {
         const { docs, ...data } = await ProductModel.paginate({ categoryId: req.params.id }, options);
         res.json({
             meassge: "Success",
-            products: docs,
+            data: docs,
             ...data,
         });
     } catch (error) {
@@ -59,7 +49,7 @@ export const getProductBySlug = async (req, res) => {
         const data = await ProductModel.findOne({ slug: req.params.id });
         res.json({
             meassge: "Success",
-            product: data,
+            data,
         });
     } catch (error) {
         console.log(error);
@@ -70,7 +60,7 @@ export const getProductById = async (req, res) => {
         const data = await ProductModel.findById(req.params.id);
         res.json({
             meassge: "Successfully",
-            product: data,
+            data,
         });
     } catch (error) {
         console.log(error);
@@ -80,10 +70,7 @@ export const getProductById = async (req, res) => {
 export const newProduct = async (req, res) => {
     try {
         const newProduct = req.body;
-        const error = schema.validate(newProduct);
-        if (error.error) {
-            return res.json({ meassge: error.error.details[0].message });
-        }
+
         const product = new ProductModel(newProduct);
         const data = await product.save();
         // await CategoryModel.findByIdAndUpdate(data.categoryId, { $push: { products: data._id } });
@@ -100,15 +87,12 @@ export const newProduct = async (req, res) => {
 export const updateProduct = async (req, res) => {
     const id = req.params.id;
     const newProduct = req.body;
-    const error = schema.validate(newProduct);
-    if (error.error) {
-        return res.json({ meassge: error.error.details[0].message });
-    }
 
     // await axios.put("http://localhost:8080/products/" + id, req.body);
-    const result = await ProductModel.findByIdAndUpdate(id, req.body);
+    const result = await ProductModel.findByIdAndUpdate(id, req.body, { new: true });
     res.json({
         meassge: "Update product success",
+        data: result,
     });
 };
 
@@ -118,5 +102,6 @@ export const deleteProduct = async (req, res) => {
     const result = await ProductModel.findByIdAndDelete(id);
     res.json({
         meassge: "Delete product successfully",
+        data: result,
     });
 };

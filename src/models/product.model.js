@@ -11,17 +11,18 @@ const Product = new mongoose.Schema(
         price: { type: Number },
         original_price: { type: Number },
         description: { type: String },
-        images: [{ base_url: { type: String, publicId: { type: String } }, _id: false }],
-        categoryId: { type: mongoose.SchemaTypes.ObjectId, ref: "Categories", require: true },
+        avatar: { base_url: { type: String }, publicId: { type: String } },
+        images: [{ base_url: { type: String }, publicId: { type: String }, _id: false }],
+        categoryId: { type: mongoose.SchemaTypes.ObjectId, ref: "category", require: true },
     },
-    { collection: "Products", timestamps: true }
+    { collection: "products", timestamps: true }
 );
 
 Product.index({ name: "text" });
 
 Product.plugin(mongoosePaginate);
 
-const ProductModel = mongoose.model("Products", Product);
+const ProductModel = mongoose.model("products", Product);
 
 ProductModel.createIndexes({ name: "text" });
 export default ProductModel;

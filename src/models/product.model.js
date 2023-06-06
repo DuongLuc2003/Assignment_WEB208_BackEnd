@@ -1,13 +1,12 @@
 import mongoose from "mongoose";
 import mongoosePaginate from "mongoose-paginate-v2";
-import slug from "mongoose-slug-generator";
-
-mongoose.plugin(slug);
+import slugify from "slugify";
+import shortid from "shortid";
 
 const Product = new mongoose.Schema(
     {
         name: { type: String, require: true },
-        slug: { type: String, slug: "name" },
+        slug: { type: String, unique: true },
         price: { type: Number },
         original_price: { type: Number },
         description: { type: String },
@@ -17,6 +16,15 @@ const Product = new mongoose.Schema(
     },
     { collection: "products", timestamps: true }
 );
+
+Product.pre("save", function (next) {
+    if (!this.slug) {
+        let baseSlug = slugify(this.name, { lower: true });
+        const uniqueId = shortid.generate();
+        this.slug = `${baseSlug}-${uniqueId}`;
+    }
+    next();
+});
 
 Product.index({ name: "text" });
 

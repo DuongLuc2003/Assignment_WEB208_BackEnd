@@ -41,7 +41,7 @@ export const Login = async(req,res)=>{
     const {email,password} = req.body
     const {error} = CheckvalidateSignIn.validate(req.body)
     if(error){
-      return res.status.json({
+      return res.status(500).json({
         error: error.details[0].message
       })
     }

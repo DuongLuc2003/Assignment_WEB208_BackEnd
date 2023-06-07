@@ -1,4 +1,5 @@
 import jwt from "jsonwebtoken"
+import UserSchema from "../models/user.model"
 
 export const checkpirmision = async(req,res,next)=>{
 try {
@@ -19,7 +20,7 @@ try {
                 });
               }
         }
-        const user = await UserCheme.findById(payload._id);
+        const user = await UserSchema.findById(payload._id);
         console.log(user);
         if (user && user.role !== "admin") {
           return res.json({

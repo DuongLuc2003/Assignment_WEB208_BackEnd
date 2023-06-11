@@ -2,7 +2,7 @@ import ProductModel from "~/models/product.model.js";
 
 export const getAllProducts = async (req, res) => {
     try {
-        const { _sort = "createdAt", page = 1, limit = 10, _order = "desc" } = req.query;
+        const { _sort = "createdAt", page = 1, limit = 10, _order = "desc", search, ...obj } = req.query;
         const options = {
             page,
             limit,
@@ -11,7 +11,15 @@ export const getAllProducts = async (req, res) => {
             },
         };
 
-        const { docs, ...data } = await ProductModel.paginate({}, options);
+        const filter = obj || {};
+
+        if (search) {
+            filter.name = { $regex: `.*${search}.*`, $options: "i" };
+        }
+
+        console.log(options);
+
+        const { docs, ...data } = await ProductModel.paginate(filter, options);
         res.json({
             meassge: "Success",
             data: docs,

@@ -9,7 +9,6 @@ import {
     updateProduct,
 } from "~/controllers/ProductController";
 import { productValidator } from "~/validators/product.validator";
-// import { verifyToken } from "~/middleware/verifyToken";
 
 const router = express.Router();
 
